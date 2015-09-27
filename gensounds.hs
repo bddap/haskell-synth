@@ -1,27 +1,34 @@
-module Sound where
+module Gensounds(
+gen
+)where
 import Data.WAVE
 import Data.Int (Int32)
-import Song
 
 samplesPS = 16000
 bitrate = 32
-maxInt = 2 ^ (32-1) - 1
+
+type Time = Float
+type Sample = Float
 
 header = WAVEHeader 1 samplesPS bitrate Nothing
 
-samples :: [[Int32]]
-samples = take (round (songlen * (fromIntegral samplesPS))) $
+clip mi ma x = max mi $ min ma x
+
+samples :: Time -> (Time -> Sample) -> [[Int32]]
+samples len song = take (round (len * (fromIntegral samplesPS))) $
           map (
             (:[]) .
             round .
-            (* maxInt) .
-            songfunc
+            (* (2 ^ (32-1) - 66)) .
+            (clip 0 1.0) .
+            (+ 0.5) .
+            (/ 2.0) .
+            song .
+            ( / (fromIntegral samplesPS)) .
+            fromIntegral
           ) $
-          [0.0, 1.0 / (fromIntegral samplesPS)..]
+          [0,1..]
 
-waveData = WAVE header samples
-
-makeWavFile :: WAVE -> IO ()
-makeWavFile wav = putWAVEFile "temp.wav" wav
-
-main = makeWavFile waveData
+gen :: String -> Time -> (Time -> Sample) -> IO ()
+gen filename len song = do
+  putWAVEFile filename $ WAVE header (samples len song)

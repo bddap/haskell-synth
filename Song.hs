@@ -1,15 +1,23 @@
 
-module Song
-( songfunc
-, songlen
-) where
+module Song where
 
+import Gensounds
 import Data.Fixed (mod')
 
-saw t = fromIntegral $ rem t 1
+songlen = 8.0
 
-ramp t = sin $ t * t * 2 * 600 / songlen * pi
+pi2 song = speed (pi * 2) song
 
-songlen = 5.0
+volume v song = (*v) . song
 
-songfunc = ramp
+speed s f = f . (* s)
+
+saw t = speed 600 m t
+  where
+    m ti = mod' ti 2.0 - 1.0
+
+ramp t =  speed (t * 600 * pi * 2) sin t
+
+sine = speed 600 $ pi2 sin
+
+main = gen "out.wav" songlen sine
