@@ -7,8 +7,8 @@ import Data.Int (Int32)
 samplesPS = 16000
 bitrate = 32
 
-type Time = Float
-type Sample = Float
+type Time = Double
+type Sample = Double
 
 header = WAVEHeader 1 samplesPS bitrate Nothing
 
