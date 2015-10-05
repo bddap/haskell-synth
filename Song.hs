@@ -1,19 +1,32 @@
 module Song where
 
 import Gensounds
-import GensoundsUtil
+import GensoundsUtil (sine)
 
-note n = sine . (2.0 ** n *)
+type Frequency = Double
+type Power = Double
+type DiscreteWave = (Frequency, Power)
+type Timbre = [DiscreteWave]
+type Time = Double
+type Sample = Double
 
-play n = (attack 0 0.5) . (sustain 0.5 1) $ note n
+square :: Timbre
+square = zip pows freqs
+  where
+    freqs = map (2**) base
+    pows = map ((1/) . (2**)) base
+    base = take 5 [1,2..]
 
-playnotes [] = n
-  where n x = 0
-playnotes (x:xs) = both (play x) $ (playnotes xs) . (subtract 0.5)
+play :: Timbre -> Time -> Sample
+play s t = sum $ map sample s
+  where
+    sample (p, f) = (p/total*) . sine . (*f) $ t
+    total = sum $ map pow s
+    len = fromIntegral $ length s
+    pow (p, _) = p
 
-vibrato freq f t = f t * mute
-  where mute = sine (t * freq) * 0.5 + 0.5
+doot f = play square . (*f)
 
-song = vibrato 8 $ playnotes $ take 16 [7,7.25..]
+song t = doot (sine t * 64) t
 
-main = gen "out.wav" 8.0 song
+main = gen "out.wav" 16.0 song
