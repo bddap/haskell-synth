@@ -3,30 +3,13 @@ module Song where
 import Gensounds
 import GensoundsUtil (sine)
 
-type Frequency = Double
-type Power = Double
-type DiscreteWave = (Frequency, Power)
-type Timbre = [DiscreteWave]
-type Time = Double
-type Sample = Double
+len = fromIntegral . length
 
-square :: Timbre
-square = zip pows freqs
+song t = (/(len waves)) . sum $ map ($t) waves
   where
-    freqs = map (2**) base
-    pows = map ((1/) . (2**)) base
-    base = take 5 [1,2..]
+    waves = take 10 $ map wave [1..]
+    wave n = both (sine . (2**n *)) (sine . ((2**n+n)*))
 
-play :: Timbre -> Time -> Sample
-play s t = sum $ map sample s
-  where
-    sample (p, f) = (p/total*) . sine . (*f) $ t
-    total = sum $ map pow s
-    len = fromIntegral $ length s
-    pow (p, _) = p
-
-doot f = play square . (*f)
-
-song t = doot (sine t * 64) t
+both f g x = f x + g x
 
 main = gen "out.wav" 16.0 song
