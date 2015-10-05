@@ -1,15 +1,25 @@
 module Song where
 
 import Gensounds
-import GensoundsUtil (sine)
+import GensoundsUtil
 
 len = fromIntegral . length
 
-song t = (/(len waves)) . sum $ map ($t) waves
-  where
-    waves = take 10 $ map wave [1..]
-    wave n = both (sine . (2**n *)) (sine . ((2**n+n)*))
+fof n = 2**((fromIntegral . floor) n / 12)*440
 
 both f g x = f x + g x
+allof fs x = sum $ map ($x) fs
 
-main = gen "out.wav" 16.0 song
+song t = (ramp 0 0 1 1 t *) . sine . (*600) $ t
+
+{--
+song t = (*mutes) . sine . (*freq) $ t
+  where
+    freq = fof t
+    mutes = foldl1 (*) $ map mute $ take 4 [1..]
+    mute n = (ramp (0.9+n) (1+n) (1+n) (0+n) t) * (ramp (1.0+n) (0+n) (0.1+n) (1+n) t)
+--}
+
+--main = gen "out.wav" 16.0 song
+
+main = putStr $ show 
