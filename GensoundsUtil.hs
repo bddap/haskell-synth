@@ -33,18 +33,9 @@ beat = both f1 f2
 
 --note modifiers
 
-attack b e f t = if not afterb then 0 else go
+ramp st sa et ea t = if t > st && t < et then 1 else ramp
   where
-    afterb = t > b
-    beforee = t < e
-    go = if beforee then mute else f t
-    mute = ((t - b) * slope *) . f $ t
-    slope = 1 / (e - b)
-
-sustain b e f t = if aftere then 0 else go
-  where
-    afterb = t > b
-    aftere = t > e
-    go = if afterb then mute else f t
-    mute = f t * ((t-e)*slope)
-    slope = 1 / (b - e)
+    ramp = (t - st) * slope + sa
+    rise = ea - sa
+    run = et - st
+    slope = rise / run
