@@ -3,6 +3,13 @@ module GensoundsUtil where
 
 import Data.Fixed (mod')
 
+import System.Random
+
+rg = map (`mod` possibilities) $ rl $ next generator
+  where
+    rl (v,g) = v : (rl $ next g)
+    generator = mkStdGen 0
+
 --Base waves
 
 sine = sin . (pi*2*)
