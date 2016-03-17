@@ -15,3 +15,8 @@ deetoodeetoo t = clip (-1) 1 . (pattern apat pt *) . (warble (pattern pat pt) (p
         freq = (pi*2*f*)
     pattern p t = cycle p !! (floor t)
     clip mi ma x = max mi $ min ma x
+
+wibbleywoo t = ((warble + 1) / 2 *) . sin . (*pi) . (*500) $ t
+  where
+    warble = sin . (/ 4) . (*pi) . (+ warblewarble) $ t
+    warblewarble = sin (t * pi) * 32

@@ -5,10 +5,16 @@ import Data.Fixed (mod')
 
 import System.Random
 
-rg = map (`mod` possibilities) $ rl $ next generator
+rg = rl $ next generator
   where
     rl (v,g) = v : (rl $ next g)
     generator = mkStdGen 0
+
+random_normals = map f rg
+  where
+    f = ( / (b-l) ) . (+ l) . fromIntegral
+    (l,b) = (fromIntegral li , fromIntegral bi)
+    (li,bi) = genRange $ mkStdGen 0
 
 --Base waves
 

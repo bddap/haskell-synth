@@ -1,6 +1,4 @@
-module Song where
-
-import Gensounds
+module Three where
 
 import GensoundsUtil
 import Data.List
@@ -18,7 +16,7 @@ manage seed ratio = n
 jazz rando seed = n : rest
   where
     (r0:r1:r3:rs) = rando
-    f             = pick [3.0,4.0,5.0]
+    f             = pick [1.0,2.0,5.0]
     n             = seed * m
     m             = manage seed ratio
     ratio         = (f r0) / (f r1)
@@ -38,13 +36,16 @@ walk s t = (*a) . sine . (*f) $ t
   where
     f  = 1 / wl
     wl = notes !! (round (t*s))
-    a  = 1
+    a  = bump t * s
+
+bump t = if m (t/0.1) < 0.1 then rampup else rampdown
+  where
+    m d      = mod' d 1
+    rampup   =        m $ t         / 0.1
+    rampdown = (1-) $ m $ (t - 0.1) / 0.9
 
 song t = h a t + h b t
   where
-    a = walk 3
+    a = walk 2
     b = walk 4
     h f = (*0.5) . f
-
-main = gen "song.wav" 64 song
---main = putStr $ show $ (1-) $ mod' (0.4) 1
