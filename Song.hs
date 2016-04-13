@@ -1,37 +1,36 @@
 module Song where
 
 import Gensounds
-import GensoundsUtil
-import Timbres
+import GensoundsUtil (play)
+import Data.List (genericLength, tails)
+import Data.Ratio ((%))
+import Data.Hashable (hash,Hashable)
+import Timbres (arch)
 
-import Data.List (genericLength)
-import Data.Fixed (mod')
-import Control.Applicative
+main = gen "song.wav" 64 $ play arch notes
+--main = putStr $ show $ map (pool !!) ms
+--main = putStr $ show $ (1%2) == (2%4)
 
-notes = a <$> ns <*> ds
+notes = map (pool !!) n
   where
-    ns = [3,4,6,2]
-    ds = ns
-    a n d = n / 300.0 / d
+    n = ms 5 ++ ms 10 ++ ms 15 ++ ms 20
 
-rn = r random_normals
+ms n = iterate (markov n) [] !! 100
+
+markov :: Int -> [Int] -> [Int]
+markov m hs = pickfrom possibilities : hs
   where
-    r (h:t) = notes !! i : r t
+    possibilities = [ head h | h <- ta, t == (tail h) ]
+    t             = take depth hs
+    ta            = [take (depth+1) h | h <- tails hs, length h > depth]
+    depth         = 2
+    pickfrom p    = ps !! index
       where
-        i = floor $ genericLength notes * h
+        h = hash hs
+        index = mod h $ length ps
+        ps = mod h m : p
 
-timbre = sudo
-
-play notes t = timbre (t / n) * a
+pool = map fromRational $ sieve ns
   where
-    a = min s (2.0 - s)
-    s = (*2) $ mod' p 1.0
-    n = notes !! (floor p)
-    p = t ** 0.5 * 64
-
-songlen = (2^8)
-
-song = play rn
-
-main = gen "song.wav" songlen song
---main = putStr $ show $ notes
+    sieve (n:xs) = n : sieve [ x|x <- xs, x /= n ]
+    ns = [ n % d | d <- [1..], n <- [0..d*2] ]

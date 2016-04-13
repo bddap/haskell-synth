@@ -52,3 +52,11 @@ ramp st sa et ea t = if t > st && t < et then 1 else ramp
     rise = ea - sa
     run = et - st
     slope = rise / run
+
+
+play timbre notes t = timbre (t * 100 * n) * a
+  where
+    a = min s (2.0 - s)
+    s = (*2) $ mod' p 1.0
+    n = cycle notes !! (floor p)
+    p = t * 8
