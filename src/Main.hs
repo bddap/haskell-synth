@@ -7,15 +7,20 @@ import Data.Ratio ((%))
 import Data.Hashable (hash,Hashable)
 import Timbres (arch)
 
-main = gen "song.wav" (64*64) $ play arch notes
+main = gen "song.wav" (512) $ play arch notes
 --main = putStr $ show $ map (pool !!) ms
 --main = putStr $ show $ (1%2) == (2%4)
+--main = putStr . show . take 20 $ lazycat [[0..i] | i <- [1..]]
+
+lazycat ([]:[]) = []
+lazycat ([]:(xs:xss)) = lazycat (xs:xss)
+lazycat ((x:xs):xss) = x : lazycat (xs:xss)
 
 notes = map (pool !!) n
   where
-    n = foldl1 (++) [ms i | i <- [17..64]]
+    n = lazycat [ms i | i <- [1..]]
 
-ms n = iterate (markov n) [] !! 128
+ms n = iterate (markov n) [] !! 64
 
 markov :: Int -> [Int] -> [Int]
 markov m hs = pickfrom possibilities : hs
