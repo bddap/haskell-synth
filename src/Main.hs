@@ -1,4 +1,4 @@
-module Song where
+module Main where
 
 import Gensounds
 import GensoundsUtil (play)
@@ -7,15 +7,15 @@ import Data.Ratio ((%))
 import Data.Hashable (hash,Hashable)
 import Timbres (arch)
 
-main = gen "song.wav" 64 $ play arch notes
+main = gen "song.wav" (64*64) $ play arch notes
 --main = putStr $ show $ map (pool !!) ms
 --main = putStr $ show $ (1%2) == (2%4)
 
 notes = map (pool !!) n
   where
-    n = ms 5 ++ ms 10 ++ ms 15 ++ ms 20
+    n = foldl1 (++) [ms i | i <- [17..64]]
 
-ms n = iterate (markov n) [] !! 100
+ms n = iterate (markov n) [] !! 128
 
 markov :: Int -> [Int] -> [Int]
 markov m hs = pickfrom possibilities : hs
