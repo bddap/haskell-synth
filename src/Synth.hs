@@ -1,5 +1,8 @@
 module Synth
   ( synth
+  , Time
+  , Duration
+  , Sample
   , module Data.WAVE
   ) where
 import           Data.WAVE

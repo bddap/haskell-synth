@@ -28,4 +28,4 @@ This package re-exports Data.WAVE for convenience. Data.WAVE exports `putWAVEFil
 ## Todo
 
 - [ ] Investigate [Wavy](https://hackage.haskell.org/package/wavy-0.1.0.0/docs/Sound-Wav.html)
-- [ ] Accept frequency domain
+- [x] Accept frequency domain as input
