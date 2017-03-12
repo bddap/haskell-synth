@@ -2,38 +2,32 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                haskell-synth
-version:             0.1.0.0
--- synopsis:
+version:             0.2.0.0
+synopsis:            Generate sound as a pure function of time.
 -- description:
--- license:
--- license-file:        LICENSE
+license:             BSD3
+license-file:        LICENSE
 author:              Andrew Dirksen
 maintainer:          andrew@dirksen.com
 -- copyright:
 category:            Sound
 build-type:          Simple
--- extra-source-files:
+extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
-executable haskell-synth
-  main-is:             Main.hs
+library
+  exposed-modules:     Synth
   -- other-modules:
   -- other-extensions:
-  build-depends:       base >=4.8 && <5.0,
-                       hashable >=1.2 && <1.3,
-                       random >=1.1 && <1.2,
-                       WAVE >=0.1 && <0.2
+  build-depends:       base >=4.9 && <4.10
+                     , WAVE >=0.1 && <0.2
   hs-source-dirs:      src
   default-language:    Haskell2010
 
-
-library
-  exposed-modules:     Timbres, GensoundsUtil, Gensounds
-  -- other-modules:
-  -- other-extensions:
-  build-depends:       base >=4.8 && <5.0,
-                       hashable >=1.2 && <1.3,
-                       random >=1.1 && <1.2,
-                       WAVE
-  hs-source-dirs:      src
+executable test-synth
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , haskell-synth
   default-language:    Haskell2010

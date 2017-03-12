@@ -1,18 +1,31 @@
-
 # Haskell synth
-
-Generates lame music and dumps it into a `.wav`
-
-## Build
-
-```
-cabal install && cabal build
-```
 
 ## Use
 
-```
-cabal run
+```haskell
+module Main where
+
+import Synth
+
+main :: IO ()
+main = putWAVEFile "sound.wav" sound
+
+sound = synth 1 (sin . (2000 *))
 ```
 
-The Markov Whatever™ implementation is a cpu hog. Generation can take about 30 xkcd comics worth of time.
+## Test
+
+```bash
+cabal sandbox init && \
+cabal install && \
+cabal build && \
+cabal run && \
+afplay sound.wav
+```
+
+This package re-exports Data.WAVE for convenience. Data.WAVE exports `putWAVEFile`.
+
+## Todo
+
+- [ ] Investigate [Wavy](https://hackage.haskell.org/package/wavy-0.1.0.0/docs/Sound-Wav.html)
+- [ ] Accept frequency domain
