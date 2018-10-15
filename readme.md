@@ -25,6 +25,10 @@ afplay sound.wav
 
 This package re-exports Data.WAVE for convenience. Data.WAVE exports `putWAVEFile`.
 
+## Sample Output
+
+[Fairly bad music](https://soundcloud.com/bddap/markov-int-int-int) programatically generated using haskell synth.
+
 ## Todo
 
 - [ ] Investigate [Wavy](https://hackage.haskell.org/package/wavy-0.1.0.0/docs/Sound-Wav.html)
