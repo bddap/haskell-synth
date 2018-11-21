@@ -1,5 +1,7 @@
 # Haskell synth
 
+This is alpha quality code written as an introduction to Haskell. It's not very pretty or usable.
+
 ## Use
 
 ```haskell
